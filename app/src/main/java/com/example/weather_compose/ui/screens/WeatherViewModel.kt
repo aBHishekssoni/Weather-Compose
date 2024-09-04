@@ -9,11 +9,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-enum class Status { LOADING, ERROR, SUCCESS }
+enum class Status {
+    LOADING,
+    SUCCESS,
+    ERROR
+}
+
 data class WeatherState(
     val result: WeatherResponse = WeatherResponse(),
     val status: Status = Status.LOADING,
-    val error: String = ""
+    val error: String = "",
 )
 
 class WeatherViewModel() : ViewModel() {
@@ -32,10 +37,11 @@ class WeatherViewModel() : ViewModel() {
                     city = "lucknow",
                     apiKey = "79edda4f3448c7e92b2289d3718af890"
                 )
-                _state.update { it.copy(result = result,
-                    status = Status.SUCCESS) }
+                _state.update { it.copy(result = result, status = Status.SUCCESS) }
             } catch (e: Exception) {
-                _state.update { it.copy(status = Status.ERROR, error = e.message?:"Something went wrong") }
+                _state.update {
+                    it.copy(status = Status.ERROR, error = e.message?:"Something went wrong")
+                }
             }
         }
     }
